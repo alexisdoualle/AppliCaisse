@@ -1,0 +1,406 @@
+body {
+  min-height: 1200px;
+}
+
+h1 {
+  margin: 10px;
+  padding: 5px;
+  text-align: center;
+  border: solid 1px #CCC;
+  box-shadow: 0 0 5px 0 #DDD, 0 2px 5px 0 #CCC;
+  font-family: arial;
+  min-width: 825px;
+}
+
+h2  {
+  font-family: arial;
+  color: #333;
+  box-shadow: 0 0 5px 0 #DDD, 0 2px 5px 0 #CCC;
+}
+
+h3 {
+  margin: 10px;
+  padding: 5px;
+  text-align: center;
+  border: solid 1px #CCC;
+  font-family: arial;
+}
+
+.datePicker {
+  width: 200px;
+  margin: auto;
+}
+input[type='date'] {
+  width: 100%;
+  background-color: lightgreen;
+  font-size: 20px;
+}
+
+.login {
+position: relative;
+z-index: 1;
+max-width: 360px;
+margin: 0 auto 100px;
+padding: 45px;
+text-align: center;
+box-shadow: 0 0 20px 0 #BBB, 0 5px 5px 0 #999;
+}
+
+.login input {
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 1px;
+	padding:15px;
+	margin:0 0 15px;
+  font-size: 14px;
+ }
+
+ .login .btn_submit {
+   text-transform: uppercase;
+   background: #4CAF50;
+   color: #FFF;
+   font-size: 14px;
+   -webkit-transition: all 0.3 ease;
+   transition: all 0.3 ease;
+   cursor: pointer;
+ }
+
+ .login .btn_submit:hover, .login .btn_submit:active,.login .btn_submit:focus {
+   background: #43A047;
+ }
+
+.caisse {
+  max-width: 30px;
+}
+
+.corps {
+  margin: auto;
+  margin-top: 50px;
+  padding-bottom: 6px;
+  padding-top: 1px;
+  width: 80%;
+  display: block;
+  max-width: 1000px;
+  height: 1200px;
+  align-items: center;
+  background-color: #FFF;
+}
+
+.tableOptions {
+  min-width:830px;
+  padding:0px
+}
+
+.tableHisto {
+  background-color:#EEE;
+  width:50%;
+  padding:0px
+}
+
+.stock {
+  width: 20%;
+  min-width: 180px;
+}
+.vendre {
+  width: 25%;
+  min-width: 190px;
+  max-width: 200px;
+}
+.prix {
+  min-width: 50px;
+}
+
+
+.utilisateur {
+  background-color: black;
+  color: white;
+}
+
+.produit {
+  min-width: 90px;
+}
+
+.quantite {
+  padding: 3px;
+  font-size: 15px;
+  width: 50px;
+  height: 80%;
+  text-align: center;
+  border-style: hidden;
+}
+
+.quantite2 {
+  padding: 0px;
+  font-size: 15px;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  border-style: hidden;
+}
+.quantite3 {
+  padding: 0px;
+  font-size: 15px;
+  width: 70%;
+  height: 100%;
+  text-align: center;
+  border-style: hidden;
+}
+
+.bouttonVendre {
+  width: auto;
+  display: inline-block;
+  margin: auto;
+  border: none;
+  padding: 5px;
+  background-color: lightgreen;
+  border: solid 1px;
+}
+.bouttonVendre:hover {background-color: limegreen}
+
+.bouttonAnnuler {
+  width: 20px;;
+  text-align: center;
+  display: inline-block;
+  margin: auto;
+  border: none;
+  padding: 5px;
+  background-color: lightcoral;
+  border: solid 1px;
+}
+.bouttonAnnuler:hover {background-color: indianred}
+
+.bouttonOption {
+  min-width: 30px;
+  display: inline-block;
+  margin: auto;
+  border: none;
+  padding: 5px;
+  background-color: lightgrey;
+  border: solid 1px;
+}
+.bouttonOption:hover {background-color: darkgrey}
+
+.bouttonFacturer {
+  font-size: 8px;
+  max-width: 60px;
+  display: inline-block;
+  margin: auto;
+  border: none;
+  padding: 5px;
+  background-color: azure;
+  border: solid 1px;
+}
+.bouttonFacturer:hover {background-color: lightblue}
+
+.bouttonValider {
+  padding: 5px;
+  margin-left: 11px;
+  display: inline-block;
+  border: solid 1px;
+  background-color: lightblue;
+  width: auto;
+}
+.bouttonValider:hover {background-color: skyblue}
+
+
+
+span {
+  padding: 10px;
+}
+
+table {
+  margin-left: auto;
+  margin-right: auto;
+  font-family: arial, sans-serif;
+  border-spacing: 4px;
+  width: 70%;
+}
+
+th {
+  border: 1px solid #000;
+  text-align: left;
+  padding: 8px;
+  background-color: #000;
+  color: #FFF;
+}
+
+td {
+  border: 0px solid #DDD;
+  text-align: left;
+  padding: 4px 4px;
+}
+
+tr:nth-child(even) {
+  background-color: #EEE;
+}
+
+tr:nth-child(odd) {
+  background-color: #F6F6F6;
+}
+
+@media screen and (max-device-width: 580px) {
+
+
+  h1 {
+    max-width: 100px;
+    margin: 10px;
+    padding: 5px;
+    text-align: center;
+    border: solid 1px #CCC;
+    box-shadow: 0 0 5px 0 #DDD, 0 2px 5px 0 #CCC;
+    font-family: arial;
+  }
+
+  h2  {
+    width: 100%;
+    font-family: arial;
+    color: #333;
+    box-shadow: 0 0 5px 0 #DDD, 0 2px 5px 0 #CCC;
+  }
+
+  h3 {
+    margin: 10px;
+    padding: 5px;
+    text-align: center;
+    border: solid 1px #CCC;
+    font-family: arial;
+  }
+
+  .datePicker {
+    width: 200px;
+    margin: auto;
+  }
+  input[type='date'] {
+    width: 100%;
+    background-color: lightgreen;
+    font-size: 20px;
+  }
+
+
+  .caisse {
+    max-width: 30px;
+  }
+
+  .corps {
+    margin: auto;
+    margin-top: 50px;
+    padding-bottom: 6px;
+    padding-top: 1px;
+    display: block;
+    align-items: center;
+    background-color: #FFF;
+  }
+
+
+  .tableHisto {
+    width: 100%;
+    background-color:#EEE;
+    padding:0px
+  }
+
+  .bouttonVendre {
+    width: auto;
+    display: inline-block;
+    margin: auto;
+    border: none;
+    padding: 5px;
+    background-color: lightgreen;
+    border: solid 1px;
+  }
+  .bouttonVendre:hover {background-color: limegreen}
+
+  .bouttonAnnuler {
+    width: 20px;
+    text-align: center;
+    display: inline-block;
+    margin: auto;
+    border: none;
+    padding: 5px;
+    background-color: lightcoral;
+    border: solid 1px;
+  }
+  .bouttonAnnuler:hover {background-color: indianred}
+
+  .bouttonOption {
+    min-width: 30px;
+    display: inline-block;
+    margin: auto;
+    border: none;
+    padding: 5px;
+    background-color: lightgrey;
+    border: solid 1px;
+  }
+  .bouttonOption:hover {background-color: darkgrey}
+
+  .bouttonFacturer {
+    font-size: 8px;
+    max-width: 60px;
+    display: inline-block;
+    margin: auto;
+    border: none;
+    padding: 5px;
+    background-color: azure;
+    border: solid 1px;
+  }
+  .bouttonFacturer:hover {background-color: lightblue}
+
+  .bouttonOffrir {
+    font-size: 8px;
+    max-width: 60px;
+    display: inline-block;
+    margin: auto;
+    border: none;
+    padding: 5px;
+    background-color: turquoise;
+    border: solid 1px;
+  }
+  .bouttonOffrir:hover {background-color: darkturquoise}
+
+  .bouttonValider {
+    padding: 5px;
+    margin-left: 11px;
+    display: inline-block;
+    border: solid 1px;
+    background-color: lightblue;
+    width: auto;
+  }
+  .bouttonValider:hover {background-color: skyblue}
+
+
+  span {
+    padding: 10px;
+  }
+
+  table {
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: arial, sans-serif;
+    border-spacing: 8px;
+  }
+
+  th {
+    border: 1px solid #000;
+    text-align: left;
+    padding: 8px;
+    background-color: #000;
+    color: #FFF;
+  }
+
+  td {
+    border: 0px solid #DDD;
+    text-align: left;
+    padding: 4px 4px;
+  }
+
+  tr:nth-child(even) {
+    background-color: #EEE;
+  }
+
+  tr:nth-child(odd) {
+    background-color: #F6F6F6;
+  }
+
+
+}
