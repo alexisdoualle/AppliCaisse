@@ -30,10 +30,14 @@ h3 {
   width: 200px;
   margin: auto;
 }
-input[type='date'] {
+
+.dateclass {
   width: 100%;
   background-color: lightgreen;
   font-size: 20px;
+}
+input[type='date'] {
+
 }
 
 .login {

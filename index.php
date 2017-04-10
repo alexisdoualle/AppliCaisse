@@ -18,7 +18,7 @@
       <h2>Ventes</h2>
         <div class="datePicker">
           Entrez la date:
-          <input type="date" ng-model="todayDateFormat">
+          <input type="date" ng-model="todayDateFormat" class="dateclass">
         </div>
         <table>
           <tr>
@@ -35,13 +35,17 @@
               <input type="boutton" ng-click="decrementerProduit(produit)" value="-" class="bouttonAnnuler">
             </td>
             <td>
-              <input type="number"
-                      class="quantite"
-                      ng-model="(produitsVendusJournee | filter:{'nom_produit':produit.nom_produit} : true)[0].qte_vente"
-                      ng-click="setQteToZero(produit)">
+
+                      {{(produitsVendusJournee | filter:{'nom_produit':produit.nom_produit} : true)[0].qte_vente}}
             </td>
             <td>{{produit.prix_produit}} €</td>
             <td>{{produit.tva_produit}}%</td>
+          </tr>
+          <tr>
+            <td>chiffre d'affaire:</td>
+            <td>
+              <input type="number" ng-model="caFinal">
+            </td>
           </tr>
           <tr>
             <td><input type="button" class="bouttonVendre" value="Valider Journée" ng-click="creerVentesJournee()"></td>
@@ -105,13 +109,21 @@
               <input type="button" value="Valider" ng-click="supprimerProduit(produitASupprimer)">
             </td>
           </tr>
+          <tr>
+            <td>
+              <span>Modifier une date</span>
+              <ul>
+                <li>Ancienne date: <input type="date" ng-model="ancienneDate"></li>
+                <li>Nouvelle date: <input type="date" ng-model="nouvelleDate"></li>
+              </ul>
+              <input type="button" ng-click="changerDate(ancienneDate, nouvelleDate)" value="valider">
+            </td>
+          </tr>
         </table>
       <h2>Historique</h2>
         <table>
           <tr>
-            <th>Produit</th>
-            <th>Date</th>
-            <th>Quantité</th>
+            <th>Ventes</th>
           </tr>
           <tr ng-repeat-start="(key, value) in ventes | reverse | groupBy: 'date_vente'  ">
             <td colspan="7"> {{key}} :

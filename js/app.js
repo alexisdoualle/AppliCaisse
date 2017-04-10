@@ -3,7 +3,7 @@ app = angular.module('HLC',['angular.filter']);
 
 app.controller('mainCtrl', function($scope, $http, $window) {
 
-  // obtient la date et la met au bon format AAAA-MM-JJ dans $scope.today et $scope.thisMonth (pour le montant des ventes par période):
+
   $scope.todayDateFormat = new Date();
 
   convertirDateEnSQL = function(d) {
@@ -60,7 +60,7 @@ app.controller('mainCtrl', function($scope, $http, $window) {
 
  $scope.testClick = function(choix, montant) {
    $scope.listeDepensesJournee.push({"type":choix.nom_typedepense, "montantDepense":montant});
-   console.log($scope.ventes);
+   //console.log($scope.ventes);
  }
 
   updateVentes = function(listeJournee) {
@@ -74,7 +74,7 @@ app.controller('mainCtrl', function($scope, $http, $window) {
       })
     .success(function(data, status, headers, config) {
       console.log("requête envoyée");
-            location.reload();
+      //location.reload();
     })
     .error(function (data, status, header, config) {
     });
@@ -257,6 +257,23 @@ app.controller('mainCtrl', function($scope, $http, $window) {
         $window.location.reload();
       });
     }
+  }
+
+  $scope.changerDate = function(ancienneDate, nouvelleDate) {
+    ancienneDate = convertirDateEnSQL(ancienneDate);
+    nouvelleDate = convertirDateEnSQL(nouvelleDate);
+    $http({
+          method: "post",
+          url: "php/changerdate.php",
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          data: {
+            "ancienneDate":ancienneDate,
+            "nouvelleDate":nouvelleDate}
+          })
+    .success(function(data, status,headers,config){
+      console.log("requête envoyée");
+      $window.location.reload();
+    });
   }
 
   $scope.changerCouleur = function(item) {
