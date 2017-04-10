@@ -15,7 +15,7 @@
         Il contient les variables et méthodes qui seront utilisées, ainsi que les données
     -->
     <div ng-controller="mainCtrl">
-      <h2>Ventes de la journée</h2>
+      <h2>Ventes</h2>
         <div class="datePicker">
           Entrez la date:
           <input type="date" ng-model="todayDateFormat">
@@ -54,11 +54,16 @@
             <th>Montant</th>
           </tr>
           <tr>
-            <td>Salaires</td>
-            <td><input type="number"></td>
+            <td><select ng-model="choixTypeDepense" ng-options="dep.nom_typedepense for dep in typeDepense"></select></td>
+            <td><input type="number" ng-model="montantDepense"><input type="button" value="test" ng-click="testClick(choixTypeDepense, montantDepense)"></td>
+          </tr>
+          <tr ng-repeat="(key, value) in listeDepensesJournee | groupBy: 'type'">
+            <td> {{key}}:</td>
+            <td><span ng-repeat="v in value">({{v.montantDepense}})</span>
+            </td>
           </tr>
         </table>
-      <h2>Exporter Bilan</h2>
+      <h2>Exporter</h2>
         <table>
           <tr>
             <th>Période</th>
@@ -108,14 +113,14 @@
             <th>Date</th>
             <th>Quantité</th>
           </tr>
-          <tr ng-repeat="(key, value) in ventes | reverse | groupBy: 'date_vente'  ">
+          <tr ng-repeat-start="(key, value) in ventes | reverse | groupBy: 'date_vente'  ">
             <td colspan="7"> {{key}} :
               <ul>
-                <!-- Le second groupBy réuni les ventes de même produits, et indique son nom (key2) et le nombre (value.length) -->
-                <li ng-repeat="v in value">{{v.nom_produit}} : {{v.qte_vente}} ({{v.qte_vente*v.prix_produit}} €)</li>
+                <li ng-repeat="v in value">{{v.nom_produit}} : {{v.qte_vente}} ({{v.total_vente}} €)</li>
               </ul>
               <span style="font-size:20px; float:right">total = {{getTotal(value)}} €</span>
             </td>
+            <tr ng-repeat-end><td></td></tr>
           </tr>
         </table>
     </div><!-- fin div corps -->

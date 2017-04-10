@@ -39,6 +39,30 @@ app.controller('mainCtrl', function($scope, $http, $window) {
   }
   $scope.getProduit = getProduit();
 
+  getCA = function() {
+    $http.get("php/ca.php")
+    .then(function(response) {
+      $scope.ca = response.data.resultat;
+    });
+  }
+  $scope.getCA = getCA();
+
+
+  getTypeDepense = function() {
+    $http.get("php/typedepense.php")
+    .then(function(response) {
+      $scope.typeDepense = response.data.resultat;
+    });
+  }
+  $scope.getTypeDepense = getTypeDepense();
+
+ $scope.listeDepensesJournee = [];
+
+ $scope.testClick = function(choix, montant) {
+   $scope.listeDepensesJournee.push({"type":choix.nom_typedepense, "montantDepense":montant});
+   console.log($scope.ventes);
+ }
+
   updateVentes = function(listeJournee) {
     $http({
           method: "post",
@@ -65,7 +89,6 @@ app.controller('mainCtrl', function($scope, $http, $window) {
   $scope.produitsVendusJournee = [];
   $scope.incrementerProduit = function(produit) {
     var prixProduitFloat = parseFloat(produit.prix_produit);
-    console.log($scope.produitsVendusJournee);
     //vérifie si le produit est déjà dans les ventes de la journée
     for (var i = 0; i < $scope.produitsVendusJournee.length; i++) {
       //si oui, incrémente la quantite et quitte avec return 0
@@ -119,7 +142,7 @@ app.controller('mainCtrl', function($scope, $http, $window) {
     alrt = "date: " + dateSQL + "\n\n";
     for (var i = 0; i < $scope.produitsVendusJournee.length; i++) {
       //retire les ventes égales à 0 éventuelles:
-      if ($scope.produitsVendusJournee[i]["qte_vente"]==0) {
+      if ($scope.produitsVendusJournee[i]["qte_vente"]<=0) {
         $scope.produitsVendusJournee.splice(i,1);
       }
       $scope.produitsVendusJournee[i]["date_vente"] = dateSQL;
@@ -140,7 +163,7 @@ app.controller('mainCtrl', function($scope, $http, $window) {
   $scope.getTotal = function(listeVentes) {
     var somme = 0;
     for (i of listeVentes) {
-      somme += i.qte_vente*i.prix_produit;
+      somme += i.total_vente;
     }
     somme = Math.round(somme*100)/100;
     return somme;
