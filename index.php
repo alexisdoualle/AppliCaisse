@@ -35,8 +35,7 @@
               <input type="boutton" ng-click="decrementerProduit(produit)" value="-" class="bouttonAnnuler">
             </td>
             <td>
-
-                      {{(produitsVendusJournee | filter:{'nom_produit':produit.nom_produit} : true)[0].qte_vente}}
+              {{(produitsVendusJournee | filter:{'nom_produit':produit.nom_produit} : true)[0].qte_vente}}
             </td>
             <td>{{produit.prix_produit}} €</td>
             <td>{{produit.tva_produit}}%</td>
@@ -48,7 +47,7 @@
             </td>
           </tr>
           <tr>
-            <td><input type="button" class="bouttonVendre" value="Valider Journée" ng-click="creerVentesJournee()"></td>
+            <td><input type="button" class="bouttonVendre" value="Valider Journée" ng-click="creerVentesJournee(caFinal)"></td>
           </tr>
         </table>
       <h2>Dépenses</h2>
@@ -123,16 +122,19 @@
       <h2>Historique</h2>
         <table>
           <tr>
-            <th>Ventes</th>
+            <td>Détail<input type="radio" ng-model="historique" value="ventesDetaillees" ></td>
+            <td>Total<input type="radio" ng-model="historique" value="ventesCA"></td>
           </tr>
-          <tr ng-repeat-start="(key, value) in ventes | reverse | groupBy: 'date_vente'  ">
+          <tr ng-show="historique== 'ventesDetaillees'" ng-repeat="(key, value) in ventes | reverse | groupBy: 'date_vente'  ">
             <td colspan="7"> {{key}} :
               <ul>
                 <li ng-repeat="v in value">{{v.nom_produit}} : {{v.qte_vente}} ({{v.total_vente}} €)</li>
               </ul>
               <span style="font-size:20px; float:right">total = {{getTotal(value)}} €</span>
             </td>
-            <tr ng-repeat-end><td></td></tr>
+          </tr>
+          <tr ng-show="historique == 'ventesCA'" ng-repeat="c in ca">
+            <td>{{c}}</td>
           </tr>
         </table>
     </div><!-- fin div corps -->

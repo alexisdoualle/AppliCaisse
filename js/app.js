@@ -85,6 +85,23 @@ app.controller('mainCtrl', function($scope, $http, $window) {
     $scope.produitsVendusJournee.push({"nom_produit":produit.nom_produit, "id_produit":produit.id_produit ,"qte_vente":0});
   }
 
+  updateCA = function(montantCA, dateCA) {
+    $http({
+          method: "post",
+          url: "php/insertca.php",
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          data: {
+            "dateCA":dateCA,
+            "montantCA":montantCA}
+          })
+    .success(function(data, status,headers,config){
+      console.log("requête envoyée");
+      //$window.location.reload();
+    });
+  }
+
+  $scope.historique = 'ventesDetaillees';
+
   //fonction pour incrementer les produits
   $scope.produitsVendusJournee = [];
   $scope.incrementerProduit = function(produit) {
@@ -130,7 +147,13 @@ app.controller('mainCtrl', function($scope, $http, $window) {
   }
 
 
-  $scope.creerVentesJournee = function() {
+  $scope.creerVentesJournee = function(caFinal) {
+    //quitte si le chiffre d'affaire n'est pas entré:
+    if (!caFinal) {
+      alert("Veuillez indiquer le CA final");
+      return 0;
+    }
+    //converti $scope.todayDateFormat en sql; Si il y'a un probleme avec le format de la date, quitte.
     if (dateSQL = convertirDateEnSQL($scope.todayDateFormat)) {}
     else {return 0;}
     //vérifie si la date est déjà utilisée, si oui, quitte
@@ -140,21 +163,29 @@ app.controller('mainCtrl', function($scope, $http, $window) {
     }
     //crée un compte rendu rapide des ventes de la journée, et ajoute la date:
     alrt = "date: " + dateSQL + "\n\n";
-    for (var i = 0; i < $scope.produitsVendusJournee.length; i++) {
+    //on parcours la boucle depuis la fin, puisqu'on risque d'enlever des éléments (et changer sa propriété length)
+    for (var i = $scope.produitsVendusJournee.length-1; i >=0 ; i--) {
       //retire les ventes égales à 0 éventuelles:
       if ($scope.produitsVendusJournee[i]["qte_vente"]<=0) {
         $scope.produitsVendusJournee.splice(i,1);
+        //passe à l'élément suivant de la boucle
+        continue;
       }
       $scope.produitsVendusJournee[i]["date_vente"] = dateSQL;
       alrt += $scope.produitsVendusJournee[i]["qte_vente"] + " x ";
       alrt += $scope.produitsVendusJournee[i]["nom_produit"];
       alrt += "\n";
     }
+    if ($scope.produitsVendusJournee.length==0) {
+      alert("Il faut au moins une vente pour valider");
+      return 0;
+    }
+    alrt += "CA Final: " + caFinal;
     alrt += "\nConfirmer?"
     valider = confirm(alrt);
     if (valider) {
       updateVentes($scope.produitsVendusJournee);
-
+      updateCA(caFinal,dateSQL)
     } else {
       console.log("test = false");
     }
@@ -204,6 +235,8 @@ app.controller('mainCtrl', function($scope, $http, $window) {
       $window.location.reload();
     });
   }
+
+
 
   $scope.mois=$scope.todayDateFormat;
   $scope.exporterMois = function(mois) {
