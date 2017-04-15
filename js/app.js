@@ -39,14 +39,6 @@ app.controller('mainCtrl', function($scope, $http, $window) {
   }
   $scope.getProduit = getProduit();
 
-  getCA = function() {
-    $http.get("php/ca.php")
-    .then(function(response) {
-      $scope.ca = response.data.resultat;
-    });
-  }
-  $scope.getCA = getCA();
-
 
   getTypeDepense = function() {
     $http.get("php/typedepense.php")
@@ -74,7 +66,7 @@ app.controller('mainCtrl', function($scope, $http, $window) {
       })
     .success(function(data, status, headers, config) {
       console.log("requête envoyée");
-      //location.reload();
+      location.reload();
     })
     .error(function (data, status, header, config) {
     });
@@ -147,12 +139,8 @@ app.controller('mainCtrl', function($scope, $http, $window) {
   }
 
 
-  $scope.creerVentesJournee = function(caFinal) {
-    //quitte si le chiffre d'affaire n'est pas entré:
-    if (!caFinal) {
-      alert("Veuillez indiquer le CA final");
-      return 0;
-    }
+  $scope.creerVentesJournee = function() {
+    var caFinal = 0;
     //converti $scope.todayDateFormat en sql; Si il y'a un probleme avec le format de la date, quitte.
     if (dateSQL = convertirDateEnSQL($scope.todayDateFormat)) {}
     else {return 0;}
@@ -175,17 +163,17 @@ app.controller('mainCtrl', function($scope, $http, $window) {
       alrt += $scope.produitsVendusJournee[i]["qte_vente"] + " x ";
       alrt += $scope.produitsVendusJournee[i]["nom_produit"];
       alrt += "\n";
+      caFinal += $scope.produitsVendusJournee[i]["total_vente"];
     }
     if ($scope.produitsVendusJournee.length==0) {
       alert("Il faut au moins une vente pour valider");
       return 0;
     }
-    alrt += "CA Final: " + caFinal;
+    alrt += "\nChiffre d'affaire Final = " + caFinal +" €";
     alrt += "\nConfirmer?"
     valider = confirm(alrt);
     if (valider) {
       updateVentes($scope.produitsVendusJournee);
-      updateCA(caFinal,dateSQL)
     } else {
       console.log("test = false");
     }

@@ -41,13 +41,7 @@
             <td>{{produit.tva_produit}}%</td>
           </tr>
           <tr>
-            <td>chiffre d'affaire:</td>
-            <td>
-              <input type="number" ng-model="caFinal">
-            </td>
-          </tr>
-          <tr>
-            <td><input type="button" class="bouttonVendre" value="Valider Journée" ng-click="creerVentesJournee(caFinal)"></td>
+            <td><input type="button" class="bouttonVendre" value="Valider Journée" ng-click="creerVentesJournee()"></td>
           </tr>
         </table>
       <h2>Dépenses</h2>
@@ -121,20 +115,13 @@
         </table>
       <h2>Historique</h2>
         <table>
-          <tr>
-            <td>Détail<input type="radio" ng-model="historique" value="ventesDetaillees" ></td>
-            <td>Total<input type="radio" ng-model="historique" value="ventesCA"></td>
-          </tr>
-          <tr ng-show="historique== 'ventesDetaillees'" ng-repeat="(key, value) in ventes | reverse | groupBy: 'date_vente'  ">
+          <tr  ng-repeat="(key, value) in ventes | reverse | groupBy: 'date_vente'  ">
             <td colspan="7"> {{key}} :
               <ul>
                 <li ng-repeat="v in value">{{v.nom_produit}} : {{v.qte_vente}} ({{v.total_vente}} €)</li>
               </ul>
               <span style="font-size:20px; float:right">total = {{getTotal(value)}} €</span>
             </td>
-          </tr>
-          <tr ng-show="historique == 'ventesCA'" ng-repeat="c in ca">
-            <td>{{c}}</td>
           </tr>
         </table>
     </div><!-- fin div corps -->
