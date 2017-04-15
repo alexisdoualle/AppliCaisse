@@ -41,23 +41,33 @@
             <td>{{produit.tva_produit}}%</td>
           </tr>
           <tr>
+            <td style="width:250px">Chiffre d'affaire: <b>{{caFinalJournee}}€</b></td>
+          </tr>
+          <tr>
             <td><input type="button" class="bouttonVendre" value="Valider Journée" ng-click="creerVentesJournee()"></td>
           </tr>
         </table>
       <h2>Dépenses</h2>
+      <div class="datePicker">
+        Entrez la date:
+        <input type="date" ng-model="todayDateFormat" class="dateclass">
+      </div>
         <table>
           <tr>
             <th>Type</th>
-            <th>Montant</th>
+            <th style="width:500px">Montant</th>
           </tr>
           <tr>
             <td><select ng-model="choixTypeDepense" ng-options="dep.nom_typedepense for dep in typeDepense"></select></td>
-            <td><input type="number" ng-model="montantDepense"><input type="button" value="test" ng-click="testClick(choixTypeDepense, montantDepense)"></td>
+            <td><input type="number" ng-model="montantDepense"><input type="button" value="ajouter" ng-click="ajouterDepense(choixTypeDepense, montantDepense)"></td>
           </tr>
-          <tr ng-repeat="(key, value) in listeDepensesJournee | groupBy: 'type'">
+          <tr ng-repeat="(key, value) in listeDepensesJournee | groupBy: 'type_depense'">
             <td> {{key}}:</td>
-            <td><span ng-repeat="v in value">({{v.montantDepense}})</span>
+            <td><span ng-repeat="v in value">{{v.montant_depense}}€,</span>
             </td>
+          </tr>
+          <tr>
+            <td><input type="button" class="bouttonVendre" value="Valider Dépenses" ng-click="creerDepensesJournee()"></td>
           </tr>
         </table>
       <h2>Exporter</h2>
@@ -115,13 +125,20 @@
         </table>
       <h2>Historique</h2>
         <table>
-          <tr  ng-repeat="(key, value) in ventes | reverse | groupBy: 'date_vente'  ">
+          <tr>
+            <td>Ventes <input type="radio" ng-model="historique" value="ventes"></td>
+            <td>Dépenses <input type="radio" ng-model="historique" value="depenses"></td>
+          </tr>
+          <tr  ng-show="historique == 'ventes'" ng-repeat="(key, value) in ventes | reverse | groupBy: 'date_vente'  ">
             <td colspan="7"> {{key}} :
               <ul>
                 <li ng-repeat="v in value">{{v.nom_produit}} : {{v.qte_vente}} ({{v.total_vente}} €)</li>
               </ul>
               <span style="font-size:20px; float:right">total = {{getTotal(value)}} €</span>
             </td>
+          </tr>
+          <tr ng-show="historique == 'depenses'">
+            <td>TEST</td>
           </tr>
         </table>
     </div><!-- fin div corps -->

@@ -3,6 +3,7 @@ app = angular.module('HLC',['angular.filter']);
 
 app.controller('mainCtrl', function($scope, $http, $window) {
 
+  $scope.historique = 'ventes';
 
   $scope.todayDateFormat = new Date();
 
@@ -30,6 +31,14 @@ app.controller('mainCtrl', function($scope, $http, $window) {
   }
   $scope.getVentes = getVentes();
 
+  getDepenses = function() {
+    $http.get("php/depenses.php")
+    .then(function(response) {
+      $scope.depenses = response.data.resultat;
+    });
+  }
+  $scope.getDepenses = getDepenses();
+
 
   getProduit = function() {
     $http.get("php/produits.php")
@@ -48,12 +57,6 @@ app.controller('mainCtrl', function($scope, $http, $window) {
   }
   $scope.getTypeDepense = getTypeDepense();
 
- $scope.listeDepensesJournee = [];
-
- $scope.testClick = function(choix, montant) {
-   $scope.listeDepensesJournee.push({"type":choix.nom_typedepense, "montantDepense":montant});
-   //console.log($scope.ventes);
- }
 
   updateVentes = function(listeJournee) {
     $http({
@@ -72,28 +75,45 @@ app.controller('mainCtrl', function($scope, $http, $window) {
     });
   }
 
+  updateDepenses = function(listeDepenses) {
+    $http({
+          method: "post",
+          url: "php/insertDepenses.php",
+          headers: {},
+          data: {
+            listeDepenses
+          }
+      })
+    .success(function(data, status, headers, config) {
+      console.log("requête envoyée");
+      location.reload();
+    })
+    .error(function (data, status, header, config) {
+    });
+  }
+
   //met "0" dans la case quand on clique dessus
   $scope.setQteToZero = function(produit) {
     $scope.produitsVendusJournee.push({"nom_produit":produit.nom_produit, "id_produit":produit.id_produit ,"qte_vente":0});
   }
 
-  updateCA = function(montantCA, dateCA) {
-    $http({
-          method: "post",
-          url: "php/insertca.php",
-          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-          data: {
-            "dateCA":dateCA,
-            "montantCA":montantCA}
-          })
-    .success(function(data, status,headers,config){
-      console.log("requête envoyée");
-      //$window.location.reload();
-    });
+
+
+  $scope.listeDepensesJournee = [];
+
+  $scope.ajouterDepense = function(choix, montant) {
+    var idTypeDepense = "";
+    if (choix && montant) {
+      for (var i = 0; i < $scope.typeDepense.length; i++) {
+        if ($scope.typeDepense[i]["nom_typedepense"]==choix["nom_typedepense"]) {
+          idTypeDepense = $scope.typeDepense[i]["id_typedepense"];
+        }
+      }
+      $scope.listeDepensesJournee.push({"id_typedepense":idTypeDepense,"type_depense":choix.nom_typedepense, "montant_depense":montant});
+    }
   }
 
-  $scope.historique = 'ventesDetaillees';
-
+  $scope.caFinalJournee = 0;
   //fonction pour incrementer les produits
   $scope.produitsVendusJournee = [];
   $scope.incrementerProduit = function(produit) {
@@ -104,11 +124,17 @@ app.controller('mainCtrl', function($scope, $http, $window) {
       if ($scope.produitsVendusJournee[i].nom_produit == produit.nom_produit) {
         $scope.produitsVendusJournee[i].qte_vente += 1;
         $scope.produitsVendusJournee[i].total_vente += prixProduitFloat;
+        //incrémente le ca total:
+        $scope.caFinalJournee += prixProduitFloat;
+        $scope.caFinalJournee = Math.round($scope.caFinalJournee*100)/100;
         return 0;
       }
     }
     //ajoute le produit dans la liste des ventes de la journée:
     $scope.produitsVendusJournee.push({"nom_produit":produit.nom_produit, "id_produit":produit.id_produit ,"qte_vente":1, "total_vente":prixProduitFloat});
+    //incrémente le ca total:
+    $scope.caFinalJournee += prixProduitFloat;
+    $scope.caFinalJournee = Math.round($scope.caFinalJournee*100)/100;
   }
 
     //fonction pour decrémenter les produits
@@ -121,6 +147,8 @@ app.controller('mainCtrl', function($scope, $http, $window) {
           if ($scope.produitsVendusJournee[i].qte_vente > 0) {
             $scope.produitsVendusJournee[i].qte_vente -= 1;
             $scope.produitsVendusJournee[i].total_vente -= prixProduitFloat;
+            $scope.caFinalJournee -= prixProduitFloat;
+            $scope.caFinalJournee = Math.round($scope.caFinalJournee*100)/100;
             return 0;
           }
         }
@@ -138,9 +166,18 @@ app.controller('mainCtrl', function($scope, $http, $window) {
     return false;
   }
 
+  //vérifie si une date est présente dans les dépenses
+  verifierDateDepenses = function(d, listeDepenses) {
+    for (var i = listeDepenses.length -1; i >= 0; i--) {
+      if (listeDepenses[i].date_depense == d) {
+        return true;
+      }
+    }
+    return false;
+  }
+
 
   $scope.creerVentesJournee = function() {
-    var caFinal = 0;
     //converti $scope.todayDateFormat en sql; Si il y'a un probleme avec le format de la date, quitte.
     if (dateSQL = convertirDateEnSQL($scope.todayDateFormat)) {}
     else {return 0;}
@@ -163,19 +200,53 @@ app.controller('mainCtrl', function($scope, $http, $window) {
       alrt += $scope.produitsVendusJournee[i]["qte_vente"] + " x ";
       alrt += $scope.produitsVendusJournee[i]["nom_produit"];
       alrt += "\n";
-      caFinal += $scope.produitsVendusJournee[i]["total_vente"];
     }
     if ($scope.produitsVendusJournee.length==0) {
       alert("Il faut au moins une vente pour valider");
       return 0;
     }
-    alrt += "\nChiffre d'affaire Final = " + caFinal +" €";
+    alrt += "\nChiffre d'affaire final = " + $scope.caFinalJournee.toString() +"€";
     alrt += "\nConfirmer?"
     valider = confirm(alrt);
     if (valider) {
       updateVentes($scope.produitsVendusJournee);
     } else {
-      console.log("test = false");
+      console.log("annulation la requête");
+    }
+  }
+
+  $scope.creerDepensesJournee = function() {
+    //converti $scope.todayDateFormat en sql; Si il y'a un probleme avec le format de la date, quitte.
+    if (dateSQL = convertirDateEnSQL($scope.todayDateFormat)) {}
+    else {return 0;}
+    //vérifie si la date est déjà utilisée, si oui, quitte
+    if(verifierDateDepenses(dateSQL, $scope.depenses)) {
+      if (confirm("Des dépenses à cette date on déjà été enregistrées, êtes vous sûr de vouloir en ajouter?")) {
+        //continue
+      } else {
+        return 0;
+      }
+    }
+    //crée un compte rendu rapide des ventes de la journée, et ajoute la date:
+    alrt = "date: " + dateSQL + "\n\n";
+    for (var i = $scope.listeDepensesJournee.length-1; i >=0 ; i--) {
+      $scope.listeDepensesJournee[i]["date_depense"] = dateSQL;
+      alrt += $scope.listeDepensesJournee[i]["type_depense"];
+      alrt += " : "
+      alrt += $scope.listeDepensesJournee[i]["montant_depense"];
+      alrt += "e"
+      alrt += "\n";
+    }
+    if ($scope.listeDepensesJournee.length==0) {
+      alert("Il faut au moins une dépense pour valider");
+      return 0;
+    }
+    alrt += "\nConfirmer?"
+    valider = confirm(alrt);
+    if (valider) {
+      updateDepenses($scope.listeDepensesJournee);
+    } else {
+      console.log("annulation la requête");
     }
   }
 
