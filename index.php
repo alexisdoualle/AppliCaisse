@@ -137,8 +137,13 @@
               <span style="font-size:20px; float:right">total = {{getTotal(value)}} €</span>
             </td>
           </tr>
-          <tr ng-show="historique == 'depenses'">
-            <td>TEST</td>
+          <tr ng-show="historique == 'depenses'" ng-repeat="(key, value) in depenses | groupBy: 'date_depense'">
+            <td>
+              {{key}}
+              <ul>
+                <li ng-repeat="v in value">{{v.nom_typedepense}}, {{v.montant_depense}}€</li>
+              </ul>
+            </td>
           </tr>
         </table>
     </div><!-- fin div corps -->

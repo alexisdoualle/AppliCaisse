@@ -69,7 +69,7 @@ app.controller('mainCtrl', function($scope, $http, $window) {
       })
     .success(function(data, status, headers, config) {
       console.log("requête envoyée");
-      location.reload();
+      $window.location.reload();
     })
     .error(function (data, status, header, config) {
     });
@@ -86,7 +86,7 @@ app.controller('mainCtrl', function($scope, $http, $window) {
       })
     .success(function(data, status, headers, config) {
       console.log("requête envoyée");
-      location.reload();
+      $window.location.reload();
     })
     .error(function (data, status, header, config) {
     });
