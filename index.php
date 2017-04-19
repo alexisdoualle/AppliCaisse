@@ -6,6 +6,8 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script src="node_modules/angular/angular.min.js"></script>
     <script src="node_modules/angular-filter/dist/angular-filter.min.js"></script>
+    <script src="node_modules/chart.js/dist/Chart.min.js"></script>
+    <script src="node_modules/angular-chart.js/dist/angular-chart.min.js"></script>
     <script src="js/app.js"></script>
     <title>Caisse</title>
   </head>
@@ -128,6 +130,7 @@
           <tr>
             <td>Ventes <input type="radio" ng-model="historique" value="ventes"></td>
             <td>Dépenses <input type="radio" ng-model="historique" value="depenses"></td>
+            <td>Graph <input type="radio" ng-model="historique" value="graph"></td>
           </tr>
           <tr  ng-show="historique == 'ventes'" ng-repeat="(key, value) in ventes | reverse | groupBy: 'date_vente'  ">
             <td colspan="7"> {{key}} :
@@ -138,7 +141,7 @@
             </td>
           </tr>
           <tr ng-show="historique == 'depenses'" ng-repeat="(key, value) in depenses | groupBy: 'date_depense'">
-            <td>
+            <td colspan="7">
               {{key}}
               <ul>
                 <li ng-repeat="v in value">{{v.nom_typedepense}}, {{v.montant_depense}}€</li>
@@ -146,6 +149,14 @@
             </td>
           </tr>
         </table>
+        <input type="month" ng-model="mois"></select>
+        <input type="button" value="Valider" ng-click="changerMoisGraph(mois)">
+        <div>
+          <canvas id="line" class="chart chart-line" chart-data="data"
+            chart-labels="labels" chart-series="series" chart-options="options"
+            chart-dataset-override="datasetOverride" chart-click="onClick">
+          </canvas>
+        </div>
     </div><!-- fin div corps -->
   </body>
 </html>

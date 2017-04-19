@@ -1,9 +1,9 @@
-app = angular.module('HLC',['angular.filter']);
+app = angular.module('HLC',['angular.filter', 'chart.js']);
 
 
-app.controller('mainCtrl', function($scope, $http, $window) {
+app.controller('mainCtrl', function($scope, $http, $window, $filter) {
 
-  $scope.historique = 'ventes';
+  $scope.historique = 'graph';
 
   $scope.todayDateFormat = new Date();
 
@@ -27,6 +27,9 @@ app.controller('mainCtrl', function($scope, $http, $window) {
     $http.get("php/ventes.php")
     .then(function(response) {
       $scope.ventes = response.data.resultat;
+      $scope.data = [
+        getTotalMois($scope.ventes, '2017-04')
+      ];
     });
   }
   $scope.getVentes = getVentes();
@@ -418,7 +421,68 @@ app.controller('mainCtrl', function($scope, $http, $window) {
     .success(function(data, status,headers,config){
       console.log("requête envoyée");
     });
+  } //fin changerCouleur
+
+  //fonction groupBy
+  var groupBy = function(xs, key) {
+    return xs.reduce(function(rv, x) {
+      (rv[x[key]] = rv[x[key]] || []).push(x);
+      return rv;
+    }, {});
+  };
+
+  $scope.changerMoisGraph = function(mois) {
+    mois = convertirDateEnSQL(mois).substring(0,7);
+    $scope.data = [
+      getTotalMois($scope.ventes, mois)
+    ];
   }
+
+  $scope.testClick = function() {
+    console.log("test");
+  }
+
+  var getTotalMois = function(listeVentes, mois) {
+    var listeMois = [];
+    var totalMois = new Array(31).fill(0);
+    //on prends toutes les ventes du mois donnés:
+    for (i of listeVentes) {
+      if (i.date_vente.substring(0,7) == mois) {
+        listeMois.push(i);
+      }
+    }
+    //on regroupe les ventes par date:
+    listeMois = groupBy(listeMois, 'date_vente');
+    for (var dt in listeMois) {
+      var totalJour = $scope.getTotal(listeMois[dt]);
+      totalMois[dt.substring(8,10)-1] = totalJour;
+    }
+    return totalMois;
+  }
+
+  $scope.labels = [];
+  for (var i = 1; i <= 31; i++) {
+    $scope.labels.push(("0"+i).slice(-2));
+  }
+
+  $scope.series = ['Ventes', 'Dépenses'];
+
+  $scope.onClick = function (points, evt) {
+    console.log(points, evt);
+  };
+  $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }];
+  $scope.options = {
+    scales: {
+      yAxes: [
+        {
+          id: 'y-axis-1',
+          type: 'linear',
+          display: true,
+          position: 'left'
+        }
+      ]
+    }
+  };
 
 
 });
