@@ -30,7 +30,7 @@
             <th>Prix</th>
             <th>TVA</th>
           </tr>
-          <tr ng-repeat="produit in produits | orderBy:'ordre_produit'" >
+          <tr ng-repeat="produit in produits" >
             <td ng-attr-title="rang: {{produit.ordre_produit}}" ng-style="{'background-color':(produit.couleur_produit)}" ng-click="changerCouleur(produit)">{{produit.nom_produit}}</td>
             <td style="item-align:center; min-width:100px">
               <input type="button" ng-click="incrementerProduit(produit)" value="Ajouter" class="bouttonVendre">

@@ -5,7 +5,7 @@ header("Content-Type: application/json; charset=UTF-8");
 include 'connexiondb.php';
 
 //requête:
-$req = "SELECT * FROM produits WHERE actif_produit=1";
+$req = "SELECT * FROM produits WHERE actif_produit=1 ORDER BY `ordre_produit`";
 //WHERE date(date_vente) = '".$date."'
 $result = $conn->query($req);
 
