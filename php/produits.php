@@ -18,6 +18,7 @@ while($rs = $result->fetch_array(MYSQLI_ASSOC)) {
     $outp .= '"nom_produit":"'  . $rs["nom_produit"] . '",';
     $outp .= '"prix_produit":"'  . $rs["prix_produit"] . '",';
     $outp .= '"tva_produit":'  . $rs["tva_produit"] . ',';
+    $outp .= '"ordre_produit":'  . $rs["ordre_produit"] . ',';
     $outp .= '"couleur_produit":"'  . $rs["couleur_produit"] . '",';
     $outp .= '"hh_produit":'. $rs["hh_produit"]  .'}';
 }

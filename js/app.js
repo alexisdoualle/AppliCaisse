@@ -298,6 +298,22 @@ app.controller('mainCtrl', function($scope, $http, $window, $filter) {
     });
   }
 
+  //donne une position à un produit, le n°1 sera tout en haut et ainsi de suite
+  $scope.reordonner = function(item, ordre) {
+    $http({
+          method: "post",
+          url: "php/reordonner.php",
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          data: {
+            "nom_produit":item.nom_produit,
+            "ordre_produit":ordre}
+          })
+    .success(function(data, status,headers,config){
+      console.log("requête envoyée");
+      $window.location.reload();
+    });
+  }
+
 
 
   $scope.mois=$scope.todayDateFormat;

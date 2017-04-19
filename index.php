@@ -30,8 +30,8 @@
             <th>Prix</th>
             <th>TVA</th>
           </tr>
-          <tr ng-repeat="produit in produits">
-            <td ng-style="{'background-color':(produit.couleur_produit)}" ng-click="changerCouleur(produit)">{{produit.nom_produit}}</td>
+          <tr ng-repeat="produit in produits | orderBy:'ordre_produit'" >
+            <td ng-attr-title="rang: {{produit.ordre_produit}}" ng-style="{'background-color':(produit.couleur_produit)}" ng-click="changerCouleur(produit)">{{produit.nom_produit}}</td>
             <td style="item-align:center; min-width:100px">
               <input type="button" ng-click="incrementerProduit(produit)" value="Ajouter" class="bouttonVendre">
               <input type="boutton" ng-click="decrementerProduit(produit)" value="-" class="bouttonAnnuler">
@@ -112,6 +112,15 @@
               <span>Supprimer un produit</span>
               <select ng-model="produitASupprimer" ng-options="item.nom_produit for item in produits"></select>
               <input type="button" value="Valider" ng-click="supprimerProduit(produitASupprimer)">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Réordonner:
+              <select ng-model="produitOrdre" ng-options="item.nom_produit for item in produits">
+              </select>
+              <input type="number" ng-model="nouvelOrdre" placeholder="nouvelle position">
+              <input type="button" value="Valider" ng-click="reordonner(produitOrdre, nouvelOrdre)" class="btn">
             </td>
           </tr>
           <tr>
