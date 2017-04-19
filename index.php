@@ -30,6 +30,7 @@
             <th>Qté</th>
             <th>Prix</th>
             <th>TVA</th>
+            <th></th>
           </tr>
           <tr ng-repeat="produit in produits" sv-element>
             <td ng-attr-title="rang: {{produit.ordre_produit}}" ng-style="{'background-color':(produit.couleur_produit)}" ng-click="changerCouleur(produit)">{{produit.nom_produit}}</td>
@@ -37,18 +38,19 @@
               <input type="button" ng-click="incrementerProduit(produit)" value="Ajouter" class="bouttonVendre">
               <input type="boutton" ng-click="decrementerProduit(produit)" value="-" class="bouttonAnnuler">
             </td>
-            <td>
+            <td style="item-align:center; max-width:40px">
               {{(produitsVendusJournee | filter:{'nom_produit':produit.nom_produit} : true)[0].qte_vente}}
             </td>
-            <td>{{produit.prix_produit}} €</td>
+            <td style="min-width:60px">{{produit.prix_produit}} €</td>
             <td>{{produit.tva_produit}}%</td>
+            <td sv-handle style="min-width:30px"><span class="dragButton">&#8597</span></td>
           </tr>
           <tr>
             <td style="width:250px">Chiffre d'affaire: <b>{{caFinalJournee}}€</b></td>
           </tr>
           <tr>
             <td><input type="button" class="bouttonVendre" value="Valider Journée" ng-click="creerVentesJournee()"></td>
-            <td><input type="button" value="Valider Ordre des produits" ng-click="testClick()"></td>
+            <td><input type="button" value="Sauvegarder ordre produits" ng-click="testClick()"></td>
           </tr>
         </table>
       <h2>Dépenses</h2>

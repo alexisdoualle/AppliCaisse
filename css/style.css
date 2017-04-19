@@ -15,6 +15,7 @@ h1 {
 h2  {
   font-family: arial;
   color: #333;
+  background-color: lightsteelblue;
   box-shadow: 0 0 5px 0 #DDD, 0 2px 5px 0 #CCC;
 }
 
@@ -207,7 +208,13 @@ box-shadow: 0 0 20px 0 #BBB, 0 5px 5px 0 #999;
 }
 .bouttonValider:hover {background-color: skyblue}
 
-
+.dragButton {
+  display: block;
+  text-align: center;
+  color: white;
+  padding: 5px;
+  background-color: black;
+}
 
 span {
   padding: 10px;
