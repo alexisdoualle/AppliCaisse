@@ -8,6 +8,7 @@
     <script src="node_modules/angular-filter/dist/angular-filter.min.js"></script>
     <script src="node_modules/chart.js/dist/Chart.min.js"></script>
     <script src="node_modules/angular-chart.js/dist/angular-chart.min.js"></script>
+    <script src="node_modules/angular-sortable-view/src/angular-sortable-view.min.js"></script>
     <script src="js/app.js"></script>
     <title>Caisse</title>
   </head>
@@ -22,7 +23,7 @@
           Entrez la date:
           <input type="date" ng-model="todayDateFormat" class="dateclass">
         </div>
-        <table>
+        <table sv-root sv-part="produits">
           <tr>
             <th>Nom</th>
             <th></th>
@@ -30,7 +31,7 @@
             <th>Prix</th>
             <th>TVA</th>
           </tr>
-          <tr ng-repeat="produit in produits" >
+          <tr ng-repeat="produit in produits" sv-element>
             <td ng-attr-title="rang: {{produit.ordre_produit}}" ng-style="{'background-color':(produit.couleur_produit)}" ng-click="changerCouleur(produit)">{{produit.nom_produit}}</td>
             <td style="item-align:center; min-width:100px">
               <input type="button" ng-click="incrementerProduit(produit)" value="Ajouter" class="bouttonVendre">
@@ -47,6 +48,7 @@
           </tr>
           <tr>
             <td><input type="button" class="bouttonVendre" value="Valider Journée" ng-click="creerVentesJournee()"></td>
+            <td><input type="button" value="Valider Ordre des produits" ng-click="testClick()"></td>
           </tr>
         </table>
       <h2>Dépenses</h2>

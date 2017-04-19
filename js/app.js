@@ -1,4 +1,4 @@
-app = angular.module('HLC',['angular.filter', 'chart.js']);
+app = angular.module('HLC',['angular.filter', 'chart.js', 'angular-sortable-view']);
 
 
 app.controller('mainCtrl', function($scope, $http, $window, $filter) {
@@ -439,6 +439,30 @@ app.controller('mainCtrl', function($scope, $http, $window, $filter) {
     });
   } //fin changerCouleur
 
+  changementOrdre = function(listeProduits) {
+    for (var i in listeProduits) {
+      listeProduits[i].ordre_produit = i;
+      //console.log($scope.produits[i].nom_produit +" "+ $scope.produits[i].ordre_produit);
+    }
+    $http({
+          method: "post",
+          url: "php/reordonnerListe.php",
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          data: {
+            listeProduits}
+          })
+    .success(function(data, status,headers,config){
+      console.log("requête envoyée");
+      //$window.location.reload();
+    });
+  }
+
+  $scope.testClick = function() {
+    changementOrdre($scope.produits);
+  }
+
+  /* SECTION GRAPH */
+
   //fonction groupBy
   var groupBy = function(xs, key) {
     return xs.reduce(function(rv, x) {
@@ -454,9 +478,7 @@ app.controller('mainCtrl', function($scope, $http, $window, $filter) {
     ];
   }
 
-  $scope.testClick = function() {
-    console.log("test");
-  }
+
 
   var getTotalMois = function(listeVentes, mois) {
     var listeMois = [];
