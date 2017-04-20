@@ -118,9 +118,20 @@ app.controller('mainCtrl', function($scope, $http, $window, $filter) {
     }
   }
 
+
+
+  //chiffre d'affaire s'affichant en bas de la liste des produits:
   $scope.caFinalJournee = 0;
-  //fonction pour incrementer les produits
+  //initialisation du récapitulatif de la journée:
   $scope.produitsVendusJournee = [];
+
+  //Si la sauvegarde existe, rempli le tableau avec l'historique
+  if ($window.localStorage['sauvegarde']) {
+    $scope.caFinalJournee = JSON.parse($window.localStorage.getItem('caFinal'));
+    $scope.produitsVendusJournee = JSON.parse($window.localStorage.getItem('sauvegarde'));
+  }
+
+  //fonction pour incrementer les produits
   $scope.incrementerProduit = function(produit) {
     var prixProduitFloat = parseFloat(produit.prix_produit);
     //vérifie si le produit est déjà dans les ventes de la journée
@@ -132,6 +143,9 @@ app.controller('mainCtrl', function($scope, $http, $window, $filter) {
         //incrémente le ca total:
         $scope.caFinalJournee += prixProduitFloat;
         $scope.caFinalJournee = Math.round($scope.caFinalJournee*100)/100;
+        //met à jour la sauvegarde locale
+        $window.localStorage.setItem('caFinal', JSON.stringify($scope.caFinalJournee));
+        $window.localStorage.setItem('sauvegarde', JSON.stringify($scope.produitsVendusJournee));
         return 0;
       }
     }
@@ -140,6 +154,9 @@ app.controller('mainCtrl', function($scope, $http, $window, $filter) {
     //incrémente le ca total:
     $scope.caFinalJournee += prixProduitFloat;
     $scope.caFinalJournee = Math.round($scope.caFinalJournee*100)/100;
+    //met à jour la sauvegarde locale:
+    $window.localStorage.setItem('caFinal', JSON.stringify($scope.caFinalJournee));
+    $window.localStorage.setItem('sauvegarde', JSON.stringify($scope.produitsVendusJournee));
   }
 
     //fonction pour decrémenter les produits
@@ -152,13 +169,23 @@ app.controller('mainCtrl', function($scope, $http, $window, $filter) {
           if ($scope.produitsVendusJournee[i].qte_vente > 0) {
             $scope.produitsVendusJournee[i].qte_vente -= 1;
             $scope.produitsVendusJournee[i].total_vente -= prixProduitFloat;
+            //maj du chiffre d'affaire:
             $scope.caFinalJournee -= prixProduitFloat;
             $scope.caFinalJournee = Math.round($scope.caFinalJournee*100)/100;
+            //met à jour la sauvegarde locale:
+            $window.localStorage.setItem('caFinal', JSON.stringify($scope.caFinalJournee));
+            $window.localStorage.setItem('sauvegarde', JSON.stringify($scope.produitsVendusJournee));
             return 0;
           }
         }
       }
     }
+
+  //remet à zero la liste produitsVendusJournee:
+  $scope.miseAZero = function() {
+    $scope.produitsVendusJournee = [];
+    $scope.caFinalJournee = 0;
+  }
 
   //vérifie si une date est présente dans les ventes
   verifierDateVentes = function(d, listeVentes) {

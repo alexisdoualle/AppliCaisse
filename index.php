@@ -47,6 +47,7 @@
           </tr>
           <tr>
             <td style="width:250px">Chiffre d'affaire: <b>{{caFinalJournee}}€</b></td>
+            <td><input type="button" value="Mise à 0" ng-click="miseAZero()"></td>
           </tr>
           <tr>
             <td><input type="button" class="bouttonVendre" value="Valider Journée" ng-click="creerVentesJournee()"></td>
