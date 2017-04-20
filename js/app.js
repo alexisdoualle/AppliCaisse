@@ -471,8 +471,12 @@ app.controller('mainCtrl', function($scope, $http, $window, $filter) {
     }, {});
   };
 
-  $scope.changerMoisGraph = function(mois) {
-    mois = convertirDateEnSQL(mois).substring(0,7);
+
+  $scope.moisPrecedentSuivant = function(mois,indice) {
+    d = new Date(mois);
+    d.setMonth(mois.getMonth()+indice);
+    $scope.mois = d;
+    mois = convertirDateEnSQL(d).substring(0,7);
     $scope.data = [
       getTotalMois($scope.ventes, mois)
     ];

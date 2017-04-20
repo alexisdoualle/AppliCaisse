@@ -209,6 +209,7 @@ box-shadow: 0 0 20px 0 #BBB, 0 5px 5px 0 #999;
 .bouttonValider:hover {background-color: skyblue}
 
 .dragButton {
+  cursor: move;
   display: block;
   text-align: center;
   color: white;

@@ -162,8 +162,11 @@
             </td>
           </tr>
         </table>
-        <input type="month" ng-model="mois"></select>
-        <input type="button" value="Valider" ng-click="changerMoisGraph(mois)">
+        <div style="width:30%; margin:auto">
+          <input type="button" value="<" ng-click="moisPrecedentSuivant(mois,-1)">
+          <input type="month" ng-model="mois"></select>
+          <input type="button" value=">" ng-click="moisPrecedentSuivant(mois,1)">
+        </div>
         <div>
           <canvas id="line" class="chart chart-line" chart-data="data"
             chart-labels="labels" chart-series="series" chart-options="options"
