@@ -50,7 +50,7 @@
           </tr>
           <tr>
             <td><input type="button" class="bouttonVendre" value="Valider Journée" ng-click="creerVentesJournee()"></td>
-            <td><input type="button" value="Sauvegarder ordre produits" ng-click="testClick()"></td>
+            <td><input type="button" value="Sauvegarder ordre produits" ng-click="reordonnerTout()"></td>
           </tr>
         </table>
       <h2>Dépenses</h2>
@@ -162,6 +162,7 @@
             </td>
           </tr>
         </table>
+        <!-- <input type="button" name="" value="test" ng-click="testClick()"> -->
         <div style="width:30%; margin:auto">
           <input type="button" value="<" ng-click="moisPrecedentSuivant(mois,-1)">
           <input type="month" ng-model="mois"></select>

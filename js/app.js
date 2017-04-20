@@ -27,9 +27,7 @@ app.controller('mainCtrl', function($scope, $http, $window, $filter) {
     $http.get("php/ventes.php")
     .then(function(response) {
       $scope.ventes = response.data.resultat;
-      $scope.data = [
-        getTotalMois($scope.ventes, '2017-04')
-      ];
+      $scope.getDepenses = getDepenses();
     });
   }
   $scope.getVentes = getVentes();
@@ -38,9 +36,13 @@ app.controller('mainCtrl', function($scope, $http, $window, $filter) {
     $http.get("php/depenses.php")
     .then(function(response) {
       $scope.depenses = response.data.resultat;
+      $scope.data = [
+        getTotalMois($scope.ventes, '2017-04'),
+        getTotalMoisDepense($scope.depenses, '2017-04')
+      ];
     });
   }
-  $scope.getDepenses = getDepenses();
+
 
 
   getProduit = function() {
@@ -262,6 +264,15 @@ app.controller('mainCtrl', function($scope, $http, $window, $filter) {
     return somme;
   }
 
+  $scope.getTotalDepenses= function(listeDepenses) {
+    var somme = 0;
+    for (i of listeDepenses) {
+      somme += i.montant_depense;
+    }
+    somme = Math.round(somme*100)/100;
+    return somme;
+  }
+
   $scope.modifierProduit = function(item, nouveauNom=item.nom_produit, nouveauPrix=item.prix_produit, nouvelleTva=item.tva_produit) {
     if (nouveauNom=="") {
       alert("Il faut reécrire le nom")
@@ -457,9 +468,10 @@ app.controller('mainCtrl', function($scope, $http, $window, $filter) {
     });
   }
 
-  $scope.testClick = function() {
+  $scope.reordonnerTout = function() {
     changementOrdre($scope.produits);
   }
+
 
   /* SECTION GRAPH */
 
@@ -478,10 +490,32 @@ app.controller('mainCtrl', function($scope, $http, $window, $filter) {
     $scope.mois = d;
     mois = convertirDateEnSQL(d).substring(0,7);
     $scope.data = [
-      getTotalMois($scope.ventes, mois)
+      getTotalMois($scope.ventes, mois),
+      getTotalMoisDepense($scope.depenses, mois)
     ];
   }
 
+  $scope.testClick = function() {
+
+  }
+
+  var getTotalMoisDepense = function(listeDepenses, mois) {
+    var listeMois = [];
+    var totalMois = new Array(31).fill(0);
+    //on prends toutes les ventes du mois donnés:
+    for (i of listeDepenses) {
+      if (i.date_depense.substring(0,7) == mois) {
+        listeMois.push(i);
+      }
+    }
+    //on regroupe les ventes par date:
+    listeMois = groupBy(listeMois, 'date_depense');
+    for (var dt in listeMois) {
+      var totalJour = $scope.getTotalDepenses(listeMois[dt]);
+      totalMois[dt.substring(8,10)-1] = totalJour;
+    }
+    return totalMois;
+  }
 
 
   var getTotalMois = function(listeVentes, mois) {
