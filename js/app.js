@@ -36,9 +36,10 @@ app.controller('mainCtrl', function($scope, $http, $window, $filter) {
     $http.get("php/depenses.php")
     .then(function(response) {
       $scope.depenses = response.data.resultat;
+      mois = convertirDateEnSQL($scope.todayDateFormat).substring(0,7);
       $scope.data = [
-        getTotalMois($scope.ventes, '2017-04'),
-        getTotalMoisDepense($scope.depenses, '2017-04')
+        getTotalMois($scope.ventes, mois),
+        getTotalMoisDepense($scope.depenses, mois)
       ];
     });
   }
@@ -185,6 +186,8 @@ app.controller('mainCtrl', function($scope, $http, $window, $filter) {
   $scope.miseAZero = function() {
     $scope.produitsVendusJournee = [];
     $scope.caFinalJournee = 0;
+    $window.localStorage.setItem('caFinal', JSON.stringify($scope.caFinalJournee));
+    $window.localStorage.setItem('sauvegarde', JSON.stringify($scope.produitsVendusJournee));
   }
 
   //vérifie si une date est présente dans les ventes
@@ -515,6 +518,7 @@ app.controller('mainCtrl', function($scope, $http, $window, $filter) {
     d = new Date(mois);
     d.setMonth(mois.getMonth()+indice);
     $scope.mois = d;
+    $scope.labels = getLabels();
     mois = convertirDateEnSQL(d).substring(0,7);
     $scope.data = [
       getTotalMois($scope.ventes, mois),
@@ -544,10 +548,13 @@ app.controller('mainCtrl', function($scope, $http, $window, $filter) {
     return totalMois;
   }
 
+  var nbrJoursDansMois = function(mois) {
+    return new Date(mois.getFullYear(), mois.getMonth()+1, 0).getDate();
+  }
 
   var getTotalMois = function(listeVentes, mois) {
     var listeMois = [];
-    var totalMois = new Array(31).fill(0);
+    var totalMois = new Array(nbrJoursDansMois($scope.mois)).fill(0);
     //on prends toutes les ventes du mois donnés:
     for (i of listeVentes) {
       if (i.date_vente.substring(0,7) == mois) {
@@ -563,10 +570,14 @@ app.controller('mainCtrl', function($scope, $http, $window, $filter) {
     return totalMois;
   }
 
-  $scope.labels = [];
-  for (var i = 1; i <= 31; i++) {
-    $scope.labels.push(("0"+i).slice(-2));
+  getLabels = function() {
+    var labels = [];
+    for (var i = 1; i <= nbrJoursDansMois($scope.mois); i++) {
+      labels.push(("0"+i).slice(-2));
+    }
+    return labels;
   }
+  $scope.labels = getLabels();
 
   $scope.series = ['Ventes', 'Dépenses'];
 

@@ -47,11 +47,12 @@
           </tr>
           <tr>
             <td style="width:250px">Chiffre d'affaire: <b>{{caFinalJournee}}€</b></td>
-            <td><input type="button" value="Mise à 0" ng-click="miseAZero()"></td>
+            <td><input type="button" value="Remettre tout à zéro" ng-click="miseAZero()"></td>
           </tr>
           <tr>
             <td><input type="button" class="bouttonVendre" value="Valider Journée" ng-click="creerVentesJournee()"></td>
-            <td><input type="button" value="Sauvegarder ordre produits" ng-click="reordonnerTout()"></td>
+            <td colspan="2"></td>
+            <td colspan="3"><input type="button" value="Sauvegarder ordre produits" ng-click="reordonnerTout()"></td>
           </tr>
         </table>
       <h2>Dépenses</h2>
